@@ -71,9 +71,11 @@ module.exports = (options = {}) => ({
     })
   ],
   resolve: {
-    alias: {
-      '~': resolve(__dirname, 'src')
-    }
+        alias: {
+            'vue$': process.env.NODE_ENV === 'production' ? 
+                    'vue/dist/vue.min.js' :
+                    'vue/dist/vue.js'
+        }
   },
   devServer: {
     host: '127.0.0.1',

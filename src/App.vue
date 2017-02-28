@@ -1,27 +1,40 @@
 <template>
-  <div id="app">
-    <img src="./assets/logo.png">
-    <h1>{{ msg }}</h1>
+  <div>
+    <h1>Tree</h1>
     <el-button @click.native="startHacking">Let's do it</el-button>
+    <el-tree :data="treeData" :props="props" :render-content="renderContent"></el-tree>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   data () {
     return {
-      msg: 'Use Vue 2.0 Today!'
+      treeData: [],
+      props: {
+        children: 'children',
+        label: 'label'
+      }
     }
   },
 
   methods: {
     startHacking () {
-      this.$notify({
-        title: 'It Works',
-        message: 'We have laid the groundwork for you. Now it\'s your time to build something epic!',
-        duration: 6000
-      })
-    }
+      this.fetchInfo()
+    },
+    renderContent(h, {node, data, store}) {
+      return h('span', node.label)
+    },
+    fetchInfo() {
+      return axios.get('http://local.qccr.com:3000/data/')
+        .then(response => {
+          this.treeData = response.data.data
+        })
+    },
+  },
+  mounted: function() {
+    this.fetchInfo()
   }
 }
 </script>
